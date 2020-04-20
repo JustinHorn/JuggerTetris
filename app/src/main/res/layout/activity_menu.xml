@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Menu"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorPrimaryDark"
+ >
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -36,7 +37,8 @@
             android:textColor="@color/colorAccent"
             android:textSize="50sp"
             android:textStyle="bold"
-            app:fontFamily="@font/shoguns_clan" />
+            app:fontFamily="@font/shoguns_clan"
+            />
 
         <TextView
             android:id="@+id/textView4"

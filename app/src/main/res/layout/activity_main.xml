@@ -1,109 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".MainActivity">
-
-<LinearLayout
-    android:id="@+id/topPanel"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".GameActivity">
 
-    <TextView
-        android:id="@+id/tVScore"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="#FFFFFF"
-        android:text="score"
-        android:textSize="24sp" />
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tVnextBlock"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tVScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="score"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp"
+            app:fontFamily="@font/shoguns_clan" />
+
+        <TextView
+            android:id="@+id/tVnextBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="nextBlock:"
+            android:textColor="@color/colorAccent"
+            android:textSize="24sp"
+            app:fontFamily="@font/shoguns_clan" />
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/grid_nextBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:columnCount="4"
+            app:rowCount="4">
+
+        </androidx.gridlayout.widget.GridLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bPanel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="nextBlock:"
-        android:textSize="24sp" />
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gLField">
+
+        <Button
+            android:id="@+id/btnLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:onClick="moveBlockLeft"
+            android:text="⫷"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/shoguns_clan" />
+
+        <Button
+            android:id="@+id/btnDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:onClick="moveBlockDown"
+            android:text="⟱"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/shoguns_clan" />
+
+        <Button
+            android:id="@+id/btnRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:onClick="moveBlockRight"
+            android:text="⫸"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/shoguns_clan" />
+
+        <Button
+            android:id="@+id/btnRotate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:onClick="rotateBlock"
+            android:text="⟳"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/shoguns_clan" />
+    </LinearLayout>
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/grid_nextBlock"
-        android:layout_width="wrap_content"
+        android:id="@+id/gLField"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:columnCount="4"
-        app:rowCount="4">
-
-    </androidx.gridlayout.widget.GridLayout>
-</LinearLayout>
-
-<LinearLayout
-    android:id="@+id/bPanel"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/gLField"
-    >
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:onClick="move_block_left"
-        android:text="⫷"
-        android:textSize="40sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:onClick="move_block_down"
-        android:text="⟱"
-        android:textSize="40sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:onClick="move_block_right"
-        android:text="⫸"
-        android:textSize="40sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:onClick="rotate_block"
-        android:text="⟳"
-        android:textSize="40sp"
-        android:textStyle="bold" />
-</LinearLayout>
-
-<androidx.gridlayout.widget.GridLayout
-    android:id="@+id/gLField"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:columnCount="8"
-    app:rowCount="16"
-    app:layout_constraintBottom_toTopOf="@+id/bPanel"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/topPanel"
-    app:layout_constraintVertical_bias="0.58000004" />
+        app:columnCount="8"
+        app:layout_constraintBottom_toTopOf="@+id/bPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topPanel"
+        app:layout_constraintVertical_bias="0.58000004"
+        app:rowCount="16" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Tetris3</string>
+    <string name="app_name">JuggerTetris</string>
+    <string name="sync_header">JuggerTetris</string>
 </resources>
