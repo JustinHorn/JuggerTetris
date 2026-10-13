@@ -16,8 +16,11 @@ class Game(graphic: Game_Visual) : Runnable {
         private set
     private val graphic: Game_Visual
 
+    @Volatile
+    private var running = true
+
     val sleepTime: Long
-        get() = (Constants.startSleepMilliSeconds.count - score).toLong()
+        get() = (Constants.startSleepMilliSeconds.count - score).coerceAtLeast(100).toLong()
 
     init {
         nextBlock = BlockOperations.generateNewRandomBlock_withImages()
@@ -27,12 +30,15 @@ class Game(graphic: Game_Visual) : Runnable {
     }
 
     override fun run() {
-        while (game_is_on) {
+        while (running && game_is_on) {
             Thread.sleep(sleepTime)
-            while (canBlockBeMovedDown(block)) {
+            while (running && canBlockBeMovedDown(block)) {
                 block = BlockOperations.moveDown(block)
                 graphic.update_visuals()
                 Thread.sleep(sleepTime)
+            }
+            if (!running) {
+                return
             }
             field.addBricksToField( block.bricks)
             setScore(score + field.number_of_FullRows)
@@ -45,6 +51,11 @@ class Game(graphic: Game_Visual) : Runnable {
 
 
 
+
+    /** ends the game loop, called when the screen showing the game is gone */
+    fun stop() {
+        running = false
+    }
 
     private fun canBlockBeMovedDown(block: Block): Boolean {
         val down_by_One = BlockOperations.moveDown(block.copy())

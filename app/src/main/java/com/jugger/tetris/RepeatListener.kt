@@ -1,6 +1,7 @@
 package com.jugger.tetris
 
 import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
@@ -19,13 +20,13 @@ import android.view.View.OnTouchListener
  */
 class RepeatListener(val initialInterval: Int,val normalInterval: Int,
                      val clickListener: View.OnClickListener) : OnTouchListener {
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private var touchedView: View? = null
     private val handlerRunnable: Runnable = object : Runnable {
         override fun run() {
             if (touchedView!!.isEnabled) {
                 handler.postDelayed(this, normalInterval.toLong())
-                clickListener!!.onClick(touchedView)
+                clickListener.onClick(touchedView)
             } else {
                 // if the view was disabled by the clickListener, remove the callback
                 handler.removeCallbacks(this)

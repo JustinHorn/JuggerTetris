@@ -1,36 +1,44 @@
 package com.jugger.tetris
 
-import android.graphics.Point
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnLayout
 import androidx.gridlayout.widget.GridLayout
 import com.jugger.tetris.Basic.Brick
 import com.jugger.tetris.Block.BlockOperations
 import com.jugger.tetris.BorderImageview.JuggerTeamImages
 import com.jugger.tetris.BorderImageview.TetrisImageView
-import kotlinx.android.synthetic.main.activity_main.*
+import com.jugger.tetris.databinding.ActivityMainBinding
 
 class GameActivity : AppCompatActivity(), Game_Visual {
     private lateinit var main_field : Array<Array<TetrisImageView>>
     private lateinit var nextBlockGrid: Array<Array<TetrisImageView>>
     private lateinit var game: Game
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setUpGraphics()
-        startGame()
-        btnDown.setOnTouchListener (RepeatListener(100,100, View.OnClickListener { v:View -> runOnUiThread {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        hide_supportActionbar()
+        fillNextBlockGrid()
+        // the main grid is sized from the space that is left after the first layout pass
+        binding.root.doOnLayout {
+            fillMainGrid()
+            JuggerTeamImages.init(main_field[0][0], this)
+            startGame()
+        }
+        binding.btnDown.setOnTouchListener (RepeatListener(100,100, View.OnClickListener { v:View -> runOnUiThread {
             moveBlockDown(v)
         }  }))
     }
 
-    private fun setUpGraphics() {
-        hide_supportActionbar()
-        fillGrids()
-        JuggerTeamImages.init(main_field[0][0], this)
+    override fun onDestroy() {
+        super.onDestroy()
+        if (this::game.isInitialized) {
+            game.stop()
+        }
     }
 
     private fun hide_supportActionbar() {
@@ -47,28 +55,16 @@ class GameActivity : AppCompatActivity(), Game_Visual {
         g.start()
     }
 
-    private fun fillGrids() {
-        val size = displaySize
-        fillNextBlockGrid()
-        fillMainGrid(size.x, size.y)
-    }
-
-    private val displaySize: Point
-        private get() {
-            val display = windowManager.defaultDisplay
-            val size = Point()
-            display.getSize(size)
-            return size
-        }
-
-    private fun fillMainGrid(screen_width: Int, screenHeight: Int) {
-        val grid_layout = findViewById<View>(R.id.gLField) as GridLayout
-        main_field = fillGrid(grid_layout, 0.79 * screenHeight, 1 * screen_width.toDouble(), Constants.rows.count, Constants.columns.count)
+    private fun fillMainGrid() {
+        val root = binding.root
+        val height = root.height - root.paddingTop - root.paddingBottom - binding.topPanel.height - binding.bPanel.height
+        val width = root.width - root.paddingLeft - root.paddingRight
+        main_field = fillGrid(binding.gLField, height.toDouble(), width.toDouble(), Constants.rows.count, Constants.columns.count)
     }
 
     private fun fillNextBlockGrid() {
-        val grid_layout = findViewById<View>(R.id.grid_nextBlock) as GridLayout
-        nextBlockGrid = fillGrid(grid_layout, tVScore.lineHeight.toDouble(), tVScore.lineHeight.toDouble(), 4, 4)
+        val lineHeight = binding.tVScore.lineHeight.toDouble()
+        nextBlockGrid = fillGrid(binding.gridNextBlock, lineHeight, lineHeight, 4, 4)
     }
 
     private fun fillGrid(grid_layout: GridLayout, height: Double, width: Double, r: Int, c: Int): Array<Array<TetrisImageView>> {
@@ -122,8 +118,8 @@ class GameActivity : AppCompatActivity(), Game_Visual {
     }
 
     private fun updateHeaderPanel(game: Game) {
-        tVScore.text = "score: " + game.score
-        tVnextBlock.text = "nextBlock: " + game.nextBlock.blockType
+        binding.tVScore.text = "score: " + game.score
+        binding.tVnextBlock.text = "nextBlock: " + game.nextBlock.blockType
         updateNextBlockGrid(game)
     }
 
